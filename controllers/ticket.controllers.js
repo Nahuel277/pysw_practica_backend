@@ -12,6 +12,25 @@ ticketCtrl.getTickets = async (req, res) => {
     return res.json({ data: tickets });
 }
 
+ticketCtrl.getTicketsById = async (req, res) => {
+    const id = req.params.id;
+    if (!id &&!isValidObjectId(id)) {
+        return res.status(400).json({
+        status: '400',
+        message: 'El ID del ticket no es válido.',
+        });
+    }
+    try {
+        const ticket = await Ticket.findById(id);
+        res.json({ data: ticket });
+    } catch (error) {
+        res.status(400).json({
+            'status': '0',
+            'msg': 'Error procesando operacion.'
+        })
+    }
+}
+
 ticketCtrl.createTicket = async (req, res) => {
     const ticket = new Ticket(req.body);
     try {
