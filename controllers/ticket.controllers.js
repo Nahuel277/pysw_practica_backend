@@ -4,11 +4,8 @@ const Spectator = require('../models/spectator');
 const ticketCtrl = {};
 
 ticketCtrl.getTickets = async (req, res) => {
-    if(req.query.categoria){
-        const tickets = await Ticket.find({categoriaEspectador: req.query.categoria});
-        return res.json({ data: tickets });
-    }
-    const tickets = await Ticket.find();
+    const query = req.query.categoria ? { categoriaEspectador: req.query.categoria } : {};
+    const tickets = await Ticket.find(query).populate('espectador');
     return res.json({ data: tickets });
 }
 
